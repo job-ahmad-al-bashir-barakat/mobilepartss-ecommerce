@@ -2,11 +2,16 @@
   'admin_panel' => 
   array (
     'active' => '1',
-    'username' => 'test',
-    'purchase_key' => 'test',
+    'name' => env('CONFIG_SYSTEM_ADDONS_ADMIN_PANEL_NAME', 'Mobileparts'),
+    'identifier' => env('CONFIG_SYSTEM_ADDONS_ADMIN_PANEL_IDENTIFIER', 'mobileparts077@gmail.com'),
+    'username' => 'singhtajinder2060',
+    'purchase_key' => '88fa0e91-c610-4b74-ac93-9f7c4442da4b',
     'software_id' => 'MzE0NDg1OTc=',
-    'domain' => 'localhost/6Valley',
+    'domain' => env('CONFIG_SYSTEM_ADDONS_ADMIN_PANEL_DOMAIN', NULL),
     'software_type' => 'product',
+    'errors' => 
+    array (
+    ),
   ),
   'vendor_panel' => 
   array (
