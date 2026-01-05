@@ -774,4 +774,5 @@ return [
 	"You_can_now_log_in_anytime_to_track_your_order_and_manage_your_purchase_easily." => "You can now log in anytime to track your order and manage your purchase easily.",
 	"Transaction_report" => "Transaction report",
 	"sales_and_Transaction_Report" => "Sales and Transaction Report",
+	"_we_are_always_happy_to_help" => " we are always happy to help",
 ];
