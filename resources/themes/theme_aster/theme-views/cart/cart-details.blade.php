@@ -540,7 +540,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <select class="form-control text-dark set-shipping-onchange">
-                                            <option disalbed selected>{{ translate('choose_shipping_method') }}</option>
+                                            <option disabled selected>{{ translate('choose_shipping_method') }}</option>
                                             @foreach($shippings as $shipping)
                                                 <option
                                                     value="{{$shipping['id']}}" {{$choosen_shipping['shipping_method_id']==$shipping['id']?'selected':''}}>
