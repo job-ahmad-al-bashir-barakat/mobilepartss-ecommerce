@@ -775,4 +775,15 @@ return [
 	"Transaction_report" => "Transaction report",
 	"sales_and_Transaction_Report" => "Sales and Transaction Report",
 	"_we_are_always_happy_to_help" => " we are always happy to help",
+	"please_be_reminded_that,_you_have_to_setup_data_for_these_section_for_Theme_Aster." => "Please be reminded that, you have to setup data for these section for Theme Aster.",
+	"this_description_will_be_seen_on_search_engine_results_pages_and_while_sharing_the_category_link_on_social_platforms" => "This description will be seen on search engine results pages and while sharing the category link on social platforms",
+	"write_a_short_description_of_the_category." => "Write a short description of the category.",
+	"this_meta_title_will_be_seen_on_search_engine_results_pages_and_while_sharing_the_category_link_on_social_platforms" => "This meta title will be seen on search engine results pages and while sharing the category link on social platforms",
+	"add_the_category_name_taglines_etc_here." => "Add the category name taglines etc here.",
+	"Shop_does_not_exist" => "Shop does not exist",
+	"Color" => "Color",
+	"Proccesser" => "Proccesser",
+	"there_is_no_Brand" => "There is no Brand",
+	"please_be_reminded_that,_you_have_to_setup_data_for_these_section_for_Theme_Aster." => "Please be reminded that, you have to setup data for these section for Theme Aster.",
+	"Notification_Sent_to_All_Vendors" => "Notification Sent to All Vendors"
 ];
