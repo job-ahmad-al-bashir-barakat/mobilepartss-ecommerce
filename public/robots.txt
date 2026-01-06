@@ -1,5 +1,5 @@
 User-agent: *
 Disallow: /login/admin/
-Sitemap: http://mobilepartss-ecommerce.test/sitemap.xml
-# Sitemap: https://mobilepartss.com/sitemap.xml
+# Sitemap: http://mobilepartss-ecommerce.test/sitemap.xml
 # Sitemap: http://dev.mobilepartss.com/sitemap.xml
+Sitemap: https://mobilepartss.com/sitemap.xml
