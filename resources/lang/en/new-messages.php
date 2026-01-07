@@ -784,6 +784,7 @@ return [
 	"Color" => "Color",
 	"Proccesser" => "Proccesser",
 	"there_is_no_Brand" => "There is no Brand",
-	"please_be_reminded_that,_you_have_to_setup_data_for_these_section_for_Theme_Aster." => "Please be reminded that, you have to setup data for these section for Theme Aster.",
-	"Notification_Sent_to_All_Vendors" => "Notification Sent to All Vendors"
+	"Notification_Sent_to_All_Vendors" => "Notification Sent to All Vendors",
+	"currently_no_payment_gateway_supported_for_USD_currency." => "Currently no payment gateway supported for USD currency.",
+	"environment_variables_updated_successfully" => "Environment variables updated successfully",
 ];
