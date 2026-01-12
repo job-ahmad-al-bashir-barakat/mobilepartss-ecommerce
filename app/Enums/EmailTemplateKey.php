@@ -44,7 +44,7 @@ enum EmailTemplateKey
         EmailTemplateKey::ACCOUNT_BLOCK,
         EmailTemplateKey::ACCOUNT_UNBLOCK,
         EmailTemplateKey::DIGITAL_PRODUCT_DOWNLOAD,
-        EmailTemplateKey::DIGITAL_PRODUCT_OTP,
+        // EmailTemplateKey::DIGITAL_PRODUCT_OTP,
         EmailTemplateKey::ADD_FUND_TO_WALLET,
     ];
 

@@ -122,8 +122,8 @@
                                     </label>
                                 </label>
                             </div>
-                            @php($guestCheckout = getWebConfig('guest_checkout'))
-                            <div class="col-xl-6 col-md-6">
+                            {{-- @php($guestCheckout = getWebConfig('guest_checkout')) --}}
+                            {{-- <div class="col-xl-6 col-md-6">
                                 <label
                                     class="d-flex justify-content-between align-items-start gap-3 border rounded p-3 user-select-none h-100 bg-white">
                                     <span>
@@ -149,7 +149,7 @@
                                     </label>
 
                                 </label>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
