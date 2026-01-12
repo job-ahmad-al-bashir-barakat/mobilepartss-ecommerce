@@ -66,7 +66,7 @@ class ForgotPasswordController extends Controller
             return back();
         }
 
-        $customer = $this->customerRepo->getByIdentity(filters: ['phone' => $request['identity']]);
+        $customer = $this->customerRepo->getByIdentity(filters: ['email' => $request['identity']]);
         if (!$customer) {
             Toastr::error(translate('No_such_user_found'));
             return back();
@@ -78,7 +78,7 @@ class ForgotPasswordController extends Controller
         }
 
         session()->put('forgot_password_identity', $request['identity']);
-        $verificationBy = 'phone';
+        $verificationBy = 'email';
         $otpIntervalTime = getWebConfig(name: 'otp_resend_time') ?? 1;
         $smsErrorMsg = translate('something_went_wrong.') . ' ' . translate('please_try_again_after_sometime');
 
