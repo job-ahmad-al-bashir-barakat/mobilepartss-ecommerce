@@ -24,7 +24,7 @@
                                     alt="">
                             </div>
                             <p class="text-muted mx-w mx-auto text-center mb-4 width--18-75rem">
-                                {{ translate('we_will_send_you_a_temporary_OTP_in_your_phone') }}
+                                {{ translate('we_will_send_you_a_temporary_OTP_in_your_email') }}
                             </p>
                             <form action="{{ route('customer.auth.forgot-password') }}" class="forget-password-form"
                                 id="customer-forgot-password-form" method="post">
@@ -36,6 +36,8 @@
                                     <input class="form-control clean-phone-input-value" type="text" name="identity"
                                         id="recover-email" autocomplete="off" required
                                         placeholder="{{ translate('enter_your_email') }}">
+                                    {{-- <span class="fs-12 text-muted">*
+                                        {{ translate('must_use_country_code_before_phone_number') }}</span> --}}
                                     <div class="invalid-feedback">
                                         {{ translate('please_provide_valid_identity') . '.' }}
                                     </div>
