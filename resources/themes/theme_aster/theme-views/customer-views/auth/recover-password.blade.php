@@ -36,8 +36,6 @@
                                     <input class="form-control clean-phone-input-value" type="text" name="identity"
                                         id="recover-email" autocomplete="off" required
                                         placeholder="{{ translate('enter_your_email') }}">
-                                    <span class="fs-12 text-muted">*
-                                        {{ translate('must_use_country_code_before_phone_number') }}</span>
                                     <div class="invalid-feedback">
                                         {{ translate('please_provide_valid_identity') . '.' }}
                                     </div>
