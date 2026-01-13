@@ -152,6 +152,69 @@ $(document).ready(function () {
         });
     }
 
+    function loadChatMessages(userId, showLoader = false) {
+		if (userId === undefined || userId === null) return;
+
+        let actionURL = $("#chatting-post-url").data("url") + userId;
+
+        $.ajaxSetup({
+            headers: {
+                "X-XSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+
+        $.ajax({
+            url: actionURL,
+            type: "GET",
+            beforeSend: function () {
+                if (showLoader) {
+                    $("#loading").addClass("d-grid");
+                }
+            },
+            success: function (response) {
+                if (!response.userData) return;
+
+                $("#chatting-messages-section").html(response.chattingMessages);
+
+                $(".profile-image").attr("src", response.userData.image);
+                $(".profile-name").html(response.userData.name);
+                $("#profile_phone").html(response.userData.phone);
+
+                if (parseInt(response.userData["temporary-close-status"]) === 1) {
+                    $(".temporarily-closed-sticky-alert")
+                        .removeClass("d-none")
+                        .css({
+                            display: "",
+                        });
+                } else {
+                    $(".temporarily-closed-sticky-alert")
+                        .addClass("d-none")
+                        .css({
+                            display: "none",
+                        });
+                }
+
+                $("#current-user-hidden-id").val(userId);
+                $(".get-ajax-message-view.active")[0].scrollIntoView({
+                    behavior: "auto",
+                    block: "nearest",
+                    inline: "center",
+                });
+                
+                scrollToBottom();
+                imageSlider();
+                toggleVideo();
+                downloadZip();
+                namePdf();
+                manipulateTooltip();
+            },
+            complete: function () {
+                $("#loading").removeClass("d-grid");
+                reinitTooltips();
+            },
+        });
+    }
+
     function scrollToBottom() {
         try {
             $(".scroll_msg")
@@ -421,64 +484,26 @@ $(document).ready(function () {
     $(".get-ajax-message-view").on("click", function () {
         $(".get-ajax-message-view").removeClass("active");
         $(this).addClass("active");
+
         let userId = $(this).data("user-id");
-        let actionURL = $("#chatting-post-url").data("url") + userId;
+
         $("#count-unread-messages-" + userId).remove();
         $(".get-ajax-message-view").find(".chat-people-name h6").addClass("fw-normal");
+
         $(this).find(".chat-people-name h6").removeClass("fw-normal");
 
-        $.ajaxSetup({
-            headers: {
-                "X-XSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-        });
-        $.ajax({
-            url: actionURL,
-            type: "GET",
-            beforeSend: function () {
-                $("#loading").addClass("d-grid");
-            },
-            success: function (response) {
-                if (response.userData) {
-                    $("#chatting-messages-section").empty().html(response.chattingMessages);
-                    $(".profile-image").attr("src", response.userData.image);
-                    $(".profile-name").html(response.userData.name);
-                    $("#profile_phone").html(response.userData.phone);
-                    if (
-                        parseInt(response.userData["temporary-close-status"]) === 1
-                    ) {
-                        $(".temporarily-closed-sticky-alert")
-                            .removeClass("d-none")
-                            .css({
-                                display: "",
-                            });
-                    } else {
-                        $(".temporarily-closed-sticky-alert")
-                            .addClass("d-none")
-                            .css({
-                                display: "none",
-                            });
-                    }
-                    $("#current-user-hidden-id").val(userId);
-                    $(".get-ajax-message-view.active")[0].scrollIntoView({
-                        behavior: "auto",
-                        block: "nearest",
-                        inline: "center",
-                    });
-                    scrollToBottom();
-                    imageSlider();
-                    toggleVideo();
-                    downloadZip();
-                    namePdf();
-                    manipulateTooltip();
-                }
-            },
-            complete: function () {
-                $("#loading").removeClass("d-grid");
-                reinitTooltips();
-            },
-        });
+        loadChatMessages(userId, true);
     });
+
+    setInterval(function () {
+        const activeChat = $(".get-ajax-message-view.active");
+
+        if (!activeChat.length) return;
+
+        const userId = activeChat.data("user-id");
+
+        loadChatMessages(userId, false);
+    }, 10000);
 
 });
 
