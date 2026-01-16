@@ -19,7 +19,12 @@
         <meta name="twitter:description" content="@foreach(explode(' ',$blogDetails['name']) as $keyword) {{$keyword.' , '}} @endforeach">
     @endif
 
-    <meta name="keywords" content="@foreach(explode(' ',$blogDetails['name']) as $keyword) {{$keyword.' , '}} @endforeach">
+    {{-- <meta name="keywords" content="@foreach(explode(' ',$blogDetails['name']) as $keyword) {{$keyword.' , '}} @endforeach"> --}}
+    <meta name="keywords" content="
+        {{ $blogDetails['name'] }},
+        {{ implode(' ', array_slice(explode(' ', $blogDetails['name']), 0, 6)) }},
+        {{ implode(' ', array_slice(explode(' ', $blogDetails['name']), 0, 4)) }}
+    ">
 
     @if($blogDetails->added_by == 'seller')
         <meta name="author" content="{{ $blogDetails->seller->shop?$blogDetails->seller->shop->name:$blogDetails->seller->f_name}}">
