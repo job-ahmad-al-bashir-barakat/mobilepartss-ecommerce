@@ -20,10 +20,12 @@
     @endif
 
     @php
-        $keywords = collect(preg_split('/[\s,]+/u', $productDetails['name']))
-            ->filter()
-            ->unique()
-            ->implode(', ');
+        $keywords = $productDetails['name'] ?? '';
+        $keywords = str_replace(['–', '-'], ', ', $keywords);
+        $keywords = str_replace('،', ',', $keywords);
+        $keywords = preg_replace('/\s+/', ' ', $keywords);
+        $keywords = preg_replace('/,\s*,+/', ',', $keywords);
+        $keywords = trim($keywords, " ,");
     @endphp
     
     <meta name="keywords" content="{{ $keywords }}">
