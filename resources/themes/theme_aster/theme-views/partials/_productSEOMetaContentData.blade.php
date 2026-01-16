@@ -19,12 +19,14 @@
         <meta name="twitter:description" content="@foreach(explode(' ',$productDetails['name']) as $keyword) {{$keyword.' , '}} @endforeach">
     @endif
 
-    {{-- <meta name="keywords" content="@foreach(explode(' ',$productDetails['name']) as $keyword) {{$keyword.' , '}} @endforeach"> --}}
-    <meta name="keywords" content="
-        {{ $productDetails['name'] }},
-        {{ implode(' ', array_slice(explode(' ', $productDetails['name']), 0, 6)) }},
-        {{ implode(' ', array_slice(explode(' ', $productDetails['name']), 0, 4)) }}
-    ">
+    @php
+        $keywords = collect(preg_split('/[\s,]+/u', $productDetails['name']))
+            ->filter()
+            ->unique()
+            ->implode(', ');
+    @endphp
+    
+    <meta name="keywords" content="{{ $keywords }}">
 
     @if($productDetails->added_by == 'seller')
         <meta name="author" content="{{ $productDetails->seller->shop?$productDetails->seller->shop->name:$productDetails->seller->f_name}}">
