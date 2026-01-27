@@ -144,7 +144,8 @@ class ReportController extends Controller
         return [
             'formatted_data' => $inhouseEarningFormatedArray,
             'statistics' => [
-                'total_inhouse_earning' => $totalInhouseEarning + $total_tax_final - $total_shipping_earn,
+                // 'total_inhouse_earning' => $totalInhouseEarning + $total_tax_final - $total_shipping_earn,
+                'total_inhouse_earning' => $totalInhouseEarning + $total_tax_final,
                 'total_commission' => $total_commission,
                 'total_shipping_earn' => $total_shipping_earn,
                 'total_deliveryman_incentive' => $total_deliveryman_incentive,
@@ -427,7 +428,8 @@ class ReportController extends Controller
         $amount -= $order['total_tax_amount'];
         $amount += $type == 'seller' && $order->coupon_discount_bearer == 'inhouse' ? $order['discount_amount'] : 0;
         $amount -= $order['is_shipping_free'] == 1 && ($type == $order->free_delivery_bearer) ? $order['shipping_cost'] : 0;
-        $amount -= $order['is_shipping_free'] != 1 && $type == 'seller' ? $order['shipping_cost'] : 0;
+        $amount -= $order['is_shipping_free'] != 1 && in_array($type, ['seller', 'admin'], true) ? $order['shipping_cost'] : 0;
+        // $amount -= $order['is_shipping_free'] != 1 && $type == 'seller' ? $order['shipping_cost'] : 0;
         return $amount;
     }
 
