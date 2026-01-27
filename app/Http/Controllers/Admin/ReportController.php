@@ -118,7 +118,7 @@ class ReportController extends Controller
             $totalInhouseEarning += $earning;
             $total_commission += $admin_commission_earn[$key];
             $total_shipping_earn += $shipping_earn[$key];
-            $total_deliveryman_incentive += $shipping_earn[$key];
+            $total_deliveryman_incentive += $deliveryman_incentive[$key];
             $total_discount_given += $discount_given[$key];
             $total_tax_final += $total_tax[$key];
             $total_refund_given += $refund_given[$key];
