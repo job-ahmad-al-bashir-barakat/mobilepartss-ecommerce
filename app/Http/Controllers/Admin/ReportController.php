@@ -426,10 +426,11 @@ class ReportController extends Controller
     function getEarnFormOrderAmount($order, $type) {
         $amount = $order['order_amount'];
         $amount -= $order['total_tax_amount'];
-        $amount += $type == 'seller' && $order->coupon_discount_bearer == 'inhouse' ? $order['discount_amount'] : 0;
-        $amount -= $order['is_shipping_free'] == 1 && ($type == $order->free_delivery_bearer) ? $order['shipping_cost'] : 0;
-        $amount -= $order['is_shipping_free'] != 1 && in_array($type, ['seller', 'admin'], true) ? $order['shipping_cost'] : 0;
-        // $amount -= $order['is_shipping_free'] != 1 && $type == 'seller' ? $order['shipping_cost'] : 0;
+        $amount += in_array($type, ['seller', 'admin'], true) && $order->coupon_discount_bearer == 'inhouse' ? $order['discount_amount'] : 0;
+        // $amount += $type == 'seller' && $order->coupon_discount_bearer == 'inhouse' ? $order['discount_amount'] : 0;
+        $amount -= $order['is_shipping_free'] == 1 && ($type == $order->free_delivery_bearer) ? 0 : $order['shipping_cost'];
+        // $amount -= $order['is_shipping_free'] == 1 && ($type == $order->free_delivery_bearer) ? $order['shipping_cost'] : 0;
+        $amount -= $order['is_shipping_free'] != 1 && $type == 'seller' ? $order['shipping_cost'] : 0;
         return $amount;
     }
 
