@@ -295,7 +295,7 @@
                                                     <div class="d-flex align-items-center gap-10 bg-white border rounded py-2 px-10">
                                                         <input type="color" name="primary" value="{{ $businessSetting['primary_color'] }}"
                                                         class="form-control form-control_color color-code-preview">
-                                                        <span class="fs-14 fw-medium text-dark color-code color-code-selection">#1455AC</span>
+                                                        <span class="fs-14 fw-medium text-dark color-code color-code-selection">{{ $businessSetting['primary_color'] }}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -307,7 +307,7 @@
                                                     <div class="d-flex align-items-center gap-10 bg-white border rounded py-2 px-10">
                                                         <input type="color" name="secondary" value="{{ $businessSetting['secondary_color'] }}"
                                                         class="form-control form-control_color color-code-preview">
-                                                        <span class="fs-14 fw-medium text-dark color-code color-code-selection">#F58300</span>
+                                                        <span class="fs-14 fw-medium text-dark color-code color-code-selection">{{ $businessSetting['secondary_color'] }}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -318,7 +318,7 @@
                                                     </label>
                                                     <div class="d-flex align-items-center gap-10 bg-white border rounded py-2 px-10">
                                                         <input type="color" name="panel-sidebar" value="{{ $businessSetting['panel_sidebar'] }}" class="form-control form-control_color color-code-preview">
-                                                        <span class="fs-14 fw-medium text-dark color-code color-code-selection">#073B74</span>
+                                                        <span class="fs-14 fw-medium text-dark color-code color-code-selection">{{ $businessSetting['panel_sidebar'] }}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -330,7 +330,7 @@
                                                         </label>
                                                         <div class="d-flex align-items-center gap-10 bg-white border rounded py-2 px-10">
                                                             <input type="color" name="primary_light" value="{{ $businessSetting['primary_color_light'] }}" class="form-control form-control_color color-code-preview">
-                                                            <span class="fs-14 fw-medium text-dark color-code color-code-selection">#073B74</span>
+                                                            <span class="fs-14 fw-medium text-dark color-code color-code-selection">{{ $businessSetting['primary_color_light'] }}</span>
                                                         </div>
                                                     </div>
                                                 </div>
