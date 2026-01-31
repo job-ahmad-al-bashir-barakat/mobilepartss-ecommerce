@@ -766,13 +766,15 @@ class OrderManager
 
             $shippingMethod = CartShipping::where(['cart_group_id' => $groupId])->first();
             $shippingMethodId = isset($shippingMethod) ? $shippingMethod->shipping_method_id : 0;
-            $cartGroupOrderAmount = $cartGroupGrandTotal - ($couponInfo['discount'] ?? 0) - $freeShippingDiscount;
 
             $referAndEarnDiscount = OrderManager::redeemReferralDiscount(
                 referralCustomer: $checkReferralDiscount,
                 totalAmount: $onlyProductPriceGrandTotal - $totalCouponDiscount,
                 groupAmount: $onlyGroupPriceGrandTotal - ($couponInfo['discount'] ?? 0),
             );
+
+            // $cartGroupOrderAmount = $cartGroupGrandTotal - ($couponInfo['discount'] ?? 0) - $freeShippingDiscount;
+            $cartGroupOrderAmount = $cartGroupGrandTotal - ($couponInfo['discount'] ?? 0) - $referAndEarnDiscount - $freeShippingDiscount;
 
             $vendorWiseCartList[$groupId] = [
                 'seller_id' => $firstCartItem['seller_id'],
