@@ -54,7 +54,7 @@
                 </div>
             </div>
 
-            <div class="card mb-3 remove-card-shadow">
+            {{-- <div class="card mb-3 remove-card-shadow">
                 <div class="card-body">
                     <h4 class="d-flex align-items-center text-capitalize gap-10 mb-3">
                         <img width="20" class="mb-1"
@@ -66,9 +66,10 @@
                         @include('admin-views.partials._dashboard-wallet-stats', ['data' => $data])
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <div class="row g-3">
+                {{-- 
                 <div class="col-lg-8" id="order-statistics-div">
                     @include('admin-views.system.partials.order-statistics')
                 </div>
@@ -109,7 +110,8 @@
                 </div>
                 <div class="col-12" id="earn-statistics-div">
                     @include('admin-views.system.partials.earning-statistics')
-                </div>
+                </div> 
+                --}}
                 <div class="col-lg-6 col-xxl-4">
                     <div class="card h-100 remove-card-shadow">
                         @include('admin-views.partials._top-customer', [
