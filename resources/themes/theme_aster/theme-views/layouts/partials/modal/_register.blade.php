@@ -21,7 +21,7 @@
                 <form action="{{ route('customer.auth.sign-up') }}" method="POST" id="customer-form"
                       enctype="multipart/form-data">
                     @csrf
-                    <div class="custom-scrollbar height-45vh">
+                    <div>
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group mb-4">
