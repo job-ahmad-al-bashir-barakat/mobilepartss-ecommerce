@@ -228,7 +228,8 @@
                 </div>
             </div>
 
-            <div class="card mb-20">
+            {{-- Customer login: Verification --}}
+            {{-- <div class="card mb-20">
                 <div class="card-header py-3">
                     <h2>{{ translate('Verification') }}</h2>
                     <p class="mb-0 fs-12 text-capitalize">
@@ -295,7 +296,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <div class="d-flex justify-content-end trans3">
                 <div class="d-flex justify-content-sm-end justify-content-center gap-3 flex-grow-1 flex-grow-sm-0 bg-white action-btn-wrapper trans3">
