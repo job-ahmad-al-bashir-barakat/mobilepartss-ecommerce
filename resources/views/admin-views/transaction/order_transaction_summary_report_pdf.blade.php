@@ -209,7 +209,7 @@
     </tr>
 </table>
 
-{{-- <table class="content-position">
+<table class="content-position">
     <tr>
         <th class="text-left black bold"><b>{{translate('additional_information')}}</b></th>
         <th class="text-right black bold"><b>{{translate('totals')}}</b></th>
@@ -256,7 +256,7 @@
         </td>
     </tr>
     </tbody>
-</table> --}}
+</table>
 <br>
 <table class="">
     <tr>

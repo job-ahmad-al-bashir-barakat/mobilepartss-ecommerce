@@ -272,8 +272,8 @@
                             <th>{{translate('admin_discount')}}</th>
                             <th>{{translate('vendor_discount') }}</th>
                             <th>{{translate('admin_commission') }}</th>
-                            {{-- <th>{{translate('admin_net_income')}}</th> --}}
-                            {{-- <th>{{translate('vendor_net_income')}}</th> --}}
+                            <th>{{translate('admin_net_income')}}</th>
+                            <th>{{translate('vendor_net_income')}}</th>
                             <th>{{translate('payment_method')}}</th>
                             <th>{{translate('payment_Status')}}</th>
                             <th class="text-center">{{translate('action')}}</th>
@@ -319,8 +319,8 @@
                                 <td>{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $transaction['admin_discount']), currencyCode: getCurrencyCode()) }}</td>
                                 <td>{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $transaction['vendor_discount']), currencyCode: getCurrencyCode()) }}</td>
                                 <td>{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $transaction['admin_commission']), currencyCode: getCurrencyCode()) }}</td>
-                                {{-- <td>{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $transaction['admin_net_income']), currencyCode: getCurrencyCode()) }}</td> --}}
-                                {{-- <td>{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $transaction['vendor_net_income']), currencyCode: getCurrencyCode()) }}</td> --}}
+                                <td>{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $transaction['admin_net_income']), currencyCode: getCurrencyCode()) }}</td>
+                                <td>{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $transaction['vendor_net_income']), currencyCode: getCurrencyCode()) }}</td>
                                 <td>{{ ucwords(str_replace('_',' ', $transaction['payment_method'])) }}</td>
                                 <td>
                                     <div class="text-center">
