@@ -81,7 +81,7 @@ class TransactionReportController extends Controller
 
                 if ($transaction->order->shipping_responsibility == 'inhouse_shipping') {
                     if (!$transaction->order->is_shipping_free) {
-                        $adminNetIncome += $transaction['seller_is'] == 'admin' ? $transaction->order->shipping_cost : 0;
+                        $adminNetIncome += $transaction['seller_is'] !== 'admin' ? $transaction->order->shipping_cost : 0;
                     }
                     if ($transaction->order->is_shipping_free) {
                         $adminNetIncome += 0;
@@ -382,7 +382,7 @@ class TransactionReportController extends Controller
 
                 if ($transaction->order->shipping_responsibility == 'inhouse_shipping') {
                     if (!$transaction->order->is_shipping_free) {
-                        $adminNetIncome += $transaction['seller_is'] == 'admin' ? $transaction->order->shipping_cost : 0;
+                        $adminNetIncome += $transaction['seller_is'] !== 'admin' ? $transaction->order->shipping_cost : 0;
                     }
                     if ($transaction->order->is_shipping_free) {
                         $adminNetIncome += 0;
