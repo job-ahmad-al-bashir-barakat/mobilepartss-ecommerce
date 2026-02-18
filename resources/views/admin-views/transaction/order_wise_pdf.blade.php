@@ -206,7 +206,11 @@ $companyLogo = getWebConfig(name: 'company_web_logo');
                     <td class="text-center">9</td>
                     <td>{{ translate('order_Amount') }}</td>
                     <td class="text-right">
-                        {{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $transaction->order->order_amount), currencyCode: getCurrencyCode()) }}
+                        <?php 
+                            $order_amount = $transaction?->order?->order_amount ?? 0;
+                            $order_amount += $transaction?->order?->refer_and_earn_discount ?? 0;
+                        ?>
+                        {{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $order_amount), currencyCode: getCurrencyCode()) }}
                     </td>
                 </tr>
                 </tbody>
@@ -274,7 +278,7 @@ $companyLogo = getWebConfig(name: 'company_web_logo');
             <?php
                 $adminNetIncome = 0;
                 if ($transaction['seller_is'] == 'admin') {
-                    $adminNetIncome += $transaction['order_amount'];
+                    $adminNetIncome += $transaction?->order?->order_amount ?? 0;
                 }
                 if (isset($transaction->order->deliveryMan) && $transaction->order->deliveryMan->seller_id == 0) {
                     $adminNetIncome += $transaction['delivery_charge'];
@@ -283,7 +287,7 @@ $companyLogo = getWebConfig(name: 'company_web_logo');
                 }
 
                 $adminNetIncome += $transaction['admin_commission'];
-                $adminNetIncome -= $transaction?->order?->refer_and_earn_discount ?? 0;
+                $adminNetIncome += $transaction?->order?->refer_and_earn_discount ?? 0;
 
                 if ((empty($transaction?->order?->delivery_type) || $transaction->order->delivery_type == 'self_delivery') && ($transaction->order->shipping_responsibility == 'inhouse_shipping' || $transaction->order->seller_is == 'admin')) {
                     $adminNetIncome -= $transaction->order->deliveryman_charge;

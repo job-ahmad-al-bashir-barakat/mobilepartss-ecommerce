@@ -39,7 +39,7 @@
         <tr>
             <td> {{++$key}} </td>
             <td> {{$item['id']}} </td>
-            <td>{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $item->order_amount ?? 0)) }}</td>
+            <td>{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: ($item->order_amount ?? 0) + ($item->refer_and_earn_discount ?? 0))) }}</td>
             <td>{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $item->details_sum_discount ?? 0)) }}</td>
             <td>{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $item->discount_amount ?? 0)) }}</td>
             <td>{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $item->refer_and_earn_discount ?? 0)) }}</td>

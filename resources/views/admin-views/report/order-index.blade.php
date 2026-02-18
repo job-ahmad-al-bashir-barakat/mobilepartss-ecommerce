@@ -106,7 +106,8 @@
                         <img width="35" src="{{dynamicAsset(path: 'public/assets/back-end/img/products.svg')}}" alt="{{translate('image')}}">
                         <div class="info">
                             <h4 class="subtitle h1">
-                                {{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $due_amount + $settled_amount - $totalReferralDiscount), currencyCode: getCurrencyCode()) }}
+                                {{-- {{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $due_amount + $settled_amount - $totalReferralDiscount), currencyCode: getCurrencyCode()) }} --}}
+                                {{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $due_amount + $settled_amount), currencyCode: getCurrencyCode()) }}
                             </h4>
                             <h5 class="subtext">{{translate('total_Order_Amount')}}</h5>
                         </div>
@@ -254,7 +255,7 @@
                                     <a class="title-color"
                                        href="{{route('admin.orders.details',['id'=>$order->id])}}">{{$order->id}}</a>
                                 </td>
-                                <td>{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $order?->order_amount??0), currencyCode: getCurrencyCode()) }}</td>
+                                <td>{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $order?->order_amount + $order?->refer_and_earn_discount??0), currencyCode: getCurrencyCode()) }}</td>
                                 <td>{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $order?->details_sum_discount??0), currencyCode: getCurrencyCode()) }}</td>
                                 <td>{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $order?->discount_amount??0), currencyCode: getCurrencyCode()) }}</td>
                                 <td>{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $order?->refer_and_earn_discount ?? 0), currencyCode: getCurrencyCode()) }}</td>

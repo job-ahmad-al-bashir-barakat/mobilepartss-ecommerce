@@ -60,7 +60,7 @@ class TransactionReportController extends Controller
 
                 $adminNetIncome = 0;
                 if ($transaction['seller_is'] == 'admin') {
-                    $adminNetIncome += $transaction['order_amount'];
+                    $adminNetIncome += $transaction?->order?->order_amount ?? 0;
                 }
                 if (isset($transaction->order->deliveryMan) && $transaction->order->deliveryMan->seller_id == 0) {
                     $adminNetIncome += $transaction['delivery_charge'];
@@ -69,7 +69,7 @@ class TransactionReportController extends Controller
                 }
 
                 $adminNetIncome += $transaction['admin_commission'];
-                $adminNetIncome -= $transaction?->order?->refer_and_earn_discount ?? 0;
+                $adminNetIncome += $transaction?->order?->refer_and_earn_discount ?? 0;
 
                 if ((empty($transaction?->order?->delivery_type) || $transaction->order->delivery_type == 'self_delivery') && ($transaction->order->shipping_responsibility == 'inhouse_shipping' || $transaction->order->seller_is == 'admin')) {
                     $adminNetIncome -= $transaction->order->deliveryman_charge;
@@ -126,6 +126,9 @@ class TransactionReportController extends Controller
                     $firstItem = 1;
                 }
 
+                $order_amount = $transaction?->order?->order_amount ?? 0;
+                $order_amount += $transaction?->order?->refer_and_earn_discount ?? 0;
+
                 $transactionsTableData[$firstItem + $key] = [
                     'order_id' => $transaction['order_id'],
                     'shop_name' => $shopName,
@@ -139,7 +142,7 @@ class TransactionReportController extends Controller
                     'discounted_amount' => $discountAmount,
                     'tax' => $transaction?->tax ?? 0,
                     'shipping_charge' => $transaction?->order?->shipping_cost ?? 0,
-                    'order_amount' => $transaction?->order?->order_amount ?? 0,
+                    'order_amount' => $order_amount,
                     'delivered_by' => $transaction?->delivered_by ?? '',
                     'deliveryman_incentive' => $deliveryManIncentive,
                     'admin_discount' => $adminDiscount,
@@ -220,15 +223,19 @@ class TransactionReportController extends Controller
 
         $digital_payment_query = Order::whereNotIn('payment_method', ['cash', 'cash_on_delivery', 'pay_by_wallet', 'offline_payment']);
         $digital_payment = self::order_transaction_piechart_query($request, $digital_payment_query)->sum('order_amount');
+        $digital_payment += self::order_transaction_piechart_query($request, $digital_payment_query)->sum('refer_and_earn_discount');
 
         $cash_payment_query = Order::whereIn('payment_method', ['cash', 'cash_on_delivery']);
         $cash_payment = self::order_transaction_piechart_query($request, $cash_payment_query)->sum('order_amount');
+        $cash_payment += self::order_transaction_piechart_query($request, $cash_payment_query)->sum('refer_and_earn_discount');
 
         $wallet_payment_query = Order::where(['payment_method' => 'pay_by_wallet']);
         $wallet_payment = self::order_transaction_piechart_query($request, $wallet_payment_query)->sum('order_amount');
+        $wallet_payment += self::order_transaction_piechart_query($request, $wallet_payment_query)->sum('refer_and_earn_discount');
 
         $offline_payment_query = Order::where(['payment_method' => 'offline_payment']);
         $offline_payment = self::order_transaction_piechart_query($request, $offline_payment_query)->sum('order_amount');
+        $offline_payment += self::order_transaction_piechart_query($request, $offline_payment_query)->sum('refer_and_earn_discount');
 
         $total_payment = $cash_payment + $wallet_payment + $digital_payment + $offline_payment;
 
@@ -337,6 +344,8 @@ class TransactionReportController extends Controller
                 $total_tax += $transaction->tax;
                 $total_delivery_charge += $transaction->order->shipping_cost;
                 $total_order_amount += $transaction->order->order_amount;
+                $total_order_amount += $transaction?->order?->refer_and_earn_discount ?? 0;
+
 
                 $total_admin_discount += $admin_coupon_discount + $admin_shipping_discount + ($transaction?->order?->refer_and_earn_discount ?? 0);
                 $total_seller_discount += $seller_coupon_discount + $seller_shipping_discount;
@@ -361,7 +370,7 @@ class TransactionReportController extends Controller
 
                 $adminNetIncome = 0;
                 if ($transaction['seller_is'] == 'admin') {
-                    $adminNetIncome += $transaction['order_amount'];
+                    $adminNetIncome += $transaction?->order?->order_amount ?? 0;
                 }
                 if (isset($transaction->order->deliveryMan) && $transaction->order->deliveryMan->seller_id == 0) {
                     $adminNetIncome += $transaction['delivery_charge'];
@@ -370,7 +379,7 @@ class TransactionReportController extends Controller
                 }
 
                 $adminNetIncome += $transaction['admin_commission'];
-                $adminNetIncome -= $transaction?->order?->refer_and_earn_discount ?? 0;
+                $adminNetIncome += $transaction?->order?->refer_and_earn_discount ?? 0;
 
                 if ((empty($transaction?->order?->delivery_type) || $transaction->order->delivery_type == 'self_delivery') && ($transaction->order->shipping_responsibility == 'inhouse_shipping' || $transaction->order->seller_is == 'admin')) {
                     $adminNetIncome -= $transaction->order->deliveryman_charge;
@@ -609,7 +618,7 @@ class TransactionReportController extends Controller
         $year_month = date('Y-m', strtotime($start_date));
         $month = substr(date("F", strtotime("$year_month")), 0, 3);
         $orders = self::order_transaction_date_common_query($request, $start_date, $end_date)
-            ->selectRaw('sum(CASE WHEN delivery_type="self_delivery" AND shipping_responsibility="inhouse_shipping" THEN (order_amount - deliveryman_charge) ELSE order_amount END) as order_amount, YEAR(updated_at) year, MONTH(updated_at) month, DAY(updated_at) day')
+            ->selectRaw('sum(CASE WHEN delivery_type="self_delivery" AND shipping_responsibility="inhouse_shipping" THEN (order_amount + refer_and_earn_discount - deliveryman_charge) ELSE order_amount + refer_and_earn_discount END) as order_amount, YEAR(updated_at) year, MONTH(updated_at) month, DAY(updated_at) day')
             ->groupBy(DB::raw("DATE_FORMAT(updated_at, '%D')"))
             ->latest('updated_at')->get();
 
@@ -641,7 +650,7 @@ class TransactionReportController extends Controller
 
         $orders = self::order_transaction_date_common_query($request, $start_date, $end_date)
             ->select(
-                DB::raw('sum(CASE WHEN delivery_type="self_delivery" AND shipping_responsibility="inhouse_shipping" THEN (order_amount - deliveryman_charge) ELSE order_amount END) as order_amount'),
+                DB::raw('sum(CASE WHEN delivery_type="self_delivery" AND shipping_responsibility="inhouse_shipping" THEN (order_amount + refer_and_earn_discount - deliveryman_charge) ELSE order_amount + refer_and_earn_discount END) as order_amount'),
                 DB::raw("(DATE_FORMAT(updated_at, '%W')) as day")
             )
             ->groupBy(DB::raw("DATE_FORMAT(updated_at, '%D')"))
@@ -670,7 +679,7 @@ class TransactionReportController extends Controller
 
         $orders = self::order_transaction_date_common_query($request, $start_date, $end_date)
             ->select(
-                DB::raw('sum(CASE WHEN delivery_type="self_delivery" AND shipping_responsibility="inhouse_shipping" THEN (order_amount - deliveryman_charge) ELSE order_amount END) as order_amount'),
+                DB::raw('sum(CASE WHEN delivery_type="self_delivery" AND shipping_responsibility="inhouse_shipping" THEN (order_amount + refer_and_earn_discount - deliveryman_charge) ELSE order_amount + refer_and_earn_discount END) as order_amount'),
                 DB::raw("(DATE_FORMAT(updated_at, '%W')) as day")
             )
             ->groupBy(DB::raw("DATE_FORMAT(updated_at, '%D')"))
@@ -694,7 +703,7 @@ class TransactionReportController extends Controller
     {
 
         $orders = self::order_transaction_date_common_query($request, $start_date, $end_date)
-            ->selectRaw('sum(CASE WHEN delivery_type="self_delivery" AND shipping_responsibility="inhouse_shipping" THEN (order_amount - deliveryman_charge) ELSE order_amount END) as order_amount, YEAR(updated_at) year, MONTH(updated_at) month')
+            ->selectRaw('sum(CASE WHEN delivery_type="self_delivery" AND shipping_responsibility="inhouse_shipping" THEN (order_amount + refer_and_earn_discount - deliveryman_charge) ELSE order_amount + refer_and_earn_discount END) as order_amount, YEAR(updated_at) year, MONTH(updated_at) month')
             ->groupBy(DB::raw("DATE_FORMAT(updated_at, '%M')"))
             ->latest('updated_at')->get();
 
@@ -717,7 +726,7 @@ class TransactionReportController extends Controller
     {
 
         $orders = self::order_transaction_date_common_query($request, $start_date, $end_date)
-            ->selectRaw('sum(CASE WHEN delivery_type="self_delivery" AND shipping_responsibility="inhouse_shipping" THEN (order_amount - deliveryman_charge) ELSE order_amount END) as order_amount, YEAR(updated_at) year')
+            ->selectRaw('sum(CASE WHEN delivery_type="self_delivery" AND shipping_responsibility="inhouse_shipping" THEN (order_amount + refer_and_earn_discount - deliveryman_charge) ELSE order_amount + refer_and_earn_discount END) as order_amount, YEAR(updated_at) year')
             ->groupBy(DB::raw("DATE_FORMAT(updated_at, '%Y')"))
             ->latest('updated_at')->get();
 

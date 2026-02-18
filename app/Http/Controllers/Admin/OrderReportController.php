@@ -67,6 +67,7 @@ class OrderReportController extends Controller
                 });
             });
         $due_amount = self::date_wise_common_filter($due_amount_order_query, $date_type, $from, $to)->sum('order_amount');
+        $due_amount += self::date_wise_common_filter($due_amount_order_query, $date_type, $from, $to)->sum('refer_and_earn_discount');
 
         $settled_amount_query = Order::where('order_status', 'delivered')
             ->when($seller_id != 'all', function ($query) use ($seller_id) {
@@ -77,6 +78,7 @@ class OrderReportController extends Controller
                 });
             });
         $settled_amount = self::date_wise_common_filter($settled_amount_query, $date_type, $from, $to)->sum('order_amount');
+        $settled_amount += self::date_wise_common_filter($settled_amount_query, $date_type, $from, $to)->sum('refer_and_earn_discount');
 
         $referral_discount_query = Order::where('order_status', 'delivered')
             ->when($seller_id != 'all', function ($query) use ($seller_id) {
@@ -90,15 +92,19 @@ class OrderReportController extends Controller
 
         $digital_payment_query = Order::where(['order_status' => 'delivered'])->whereNotIn('payment_method', ['cash', 'cash_on_delivery', 'pay_by_wallet', 'offline_payment']);
         $digital_payment = self::pie_chart_common_query($request, $digital_payment_query)->sum('order_amount');
+        $digital_payment += self::pie_chart_common_query($request, $digital_payment_query)->sum('refer_and_earn_discount');
 
         $cash_payment_query = Order::where(['order_status' => 'delivered'])->whereIn('payment_method', ['cash', 'cash_on_delivery']);
         $cash_payment = self::pie_chart_common_query($request, $cash_payment_query)->sum('order_amount');
+        $cash_payment += self::pie_chart_common_query($request, $cash_payment_query)->sum('refer_and_earn_discount');
 
         $wallet_payment_query = Order::where(['order_status' => 'delivered'])->where(['payment_method' => 'pay_by_wallet']);
         $wallet_payment = self::pie_chart_common_query($request, $wallet_payment_query)->sum('order_amount');
+        $wallet_payment += self::pie_chart_common_query($request, $wallet_payment_query)->sum('refer_and_earn_discount');
 
         $offline_payment_query = Order::where(['payment_method' => 'offline_payment']);
         $offline_payment = self::pie_chart_common_query($request, $offline_payment_query)->sum('order_amount');
+        $offline_payment += self::pie_chart_common_query($request, $offline_payment_query)->sum('refer_and_earn_discount');
 
         $total_payment = $cash_payment + $wallet_payment + $digital_payment + $offline_payment;
 
@@ -161,7 +167,7 @@ class OrderReportController extends Controller
     public function order_report_same_year($request, $start_date, $end_date, $from_year, $number, $default_inc)
     {
         $orders = self::order_report_chart_common_query($request, $start_date, $end_date)
-            ->selectRaw('sum(order_amount) as order_amount, YEAR(updated_at) year, MONTH(updated_at) month')
+            ->selectRaw('sum(order_amount + refer_and_earn_discount) as order_amount, YEAR(updated_at) year, MONTH(updated_at) month')
             ->groupBy(DB::raw("DATE_FORMAT(updated_at, '%M')"))
             ->latest('updated_at')->get();
 
@@ -186,7 +192,7 @@ class OrderReportController extends Controller
         $month = substr(date("F", strtotime("$year_month")), 0, 3);
 
         $orders = self::order_report_chart_common_query($request, $start_date, $end_date)
-            ->selectRaw('sum(order_amount) as order_amount, YEAR(updated_at) year, MONTH(updated_at) month, DAY(updated_at) day')
+            ->selectRaw('sum(order_amount + refer_and_earn_discount) as order_amount, YEAR(updated_at) year, MONTH(updated_at) month, DAY(updated_at) day')
             ->groupBy(DB::raw("DATE_FORMAT(updated_at, '%D')"))
             ->latest('updated_at')->get();
 
@@ -218,7 +224,7 @@ class OrderReportController extends Controller
 
         $orders = self::order_report_chart_common_query($request, $start_date, $end_date)
             ->select(
-                DB::raw('sum(order_amount) as order_amount'),
+                DB::raw('sum(order_amount + refer_and_earn_discount) as order_amount'),
                 DB::raw("(DATE_FORMAT(updated_at, '%W')) as day")
             )
             ->groupBy(DB::raw("DATE_FORMAT(updated_at, '%D')"))
@@ -245,7 +251,7 @@ class OrderReportController extends Controller
 
         $orders = self::order_report_chart_common_query($request, Carbon::now()->startOfDay(), Carbon::now()->endOfDay())
             ->select(
-                DB::raw('sum(order_amount) as order_amount'),
+                DB::raw('sum(order_amount + refer_and_earn_discount) as order_amount'),
                 DB::raw("(DATE_FORMAT(updated_at, '%W')) as day")
             )
             ->groupBy(DB::raw("DATE_FORMAT(updated_at, '%D')"))
@@ -268,7 +274,7 @@ class OrderReportController extends Controller
     public function order_report_different_year($request, $start_date, $end_date, $from_year, $to_year)
     {
         $orders = self::order_report_chart_common_query($request, $start_date, $end_date)
-            ->selectRaw('sum(order_amount) as order_amount, YEAR(updated_at) year')
+            ->selectRaw('sum(order_amount + refer_and_earn_discount) as order_amount, YEAR(updated_at) year')
             ->groupBy(DB::raw("DATE_FORMAT(updated_at, '%Y')"))
             ->latest('updated_at')->get();
 
@@ -403,6 +409,7 @@ class OrderReportController extends Controller
         $seller = $request->has('seller_id') && $request['seller_id'] != 'inhouse' && $request['seller_id'] != 'all' ? (Seller::with('shop')->find($request['seller_id'])->f_name) : ($request['seller_id'] ?? 'all');
 
         $totalOrderAmount = $orders->sum('order_amount') ?? 0;
+        $totalOrderAmount += $orders->sum('refer_and_earn_discount') ?? 0;
         $totalProductDiscount = $orders->sum('details_sum_discount') ?? 0;
         $totalCouponDiscount = $orders->sum('discount_amount') ?? 0;
         $totalReferralDiscount = $orders->sum('refer_and_earn_discount') ?? 0;

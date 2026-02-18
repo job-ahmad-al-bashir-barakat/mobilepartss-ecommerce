@@ -33,15 +33,19 @@ class ReportController extends Controller
 
         $digital_payment_query = Order::where(['order_status' => 'delivered'])->whereNotIn('payment_method', ['cash', 'cash_on_delivery', 'pay_by_wallet', 'offline_payment']);
         $digital_payment = self::earning_common_query($request, $digital_payment_query)->sum('order_amount');
+        $digital_payment += self::earning_common_query($request, $digital_payment_query)->sum('refer_and_earn_discount');
 
         $cash_payment_query = Order::where(['order_status' => 'delivered'])->whereIn('payment_method', ['cash', 'cash_on_delivery']);
         $cash_payment = self::earning_common_query($request, $cash_payment_query)->sum('order_amount');
+        $cash_payment += self::earning_common_query($request, $cash_payment_query)->sum('refer_and_earn_discount');
 
         $wallet_payment_query = Order::where(['order_status' => 'delivered'])->where(['payment_method' => 'pay_by_wallet']);
         $wallet_payment = self::earning_common_query($request, $wallet_payment_query)->sum('order_amount');
+        $wallet_payment += self::earning_common_query($request, $wallet_payment_query)->sum('refer_and_earn_discount');
 
         $offline_payment_query = Order::where(['payment_method' => 'offline_payment']);
         $offline_payment = self::earning_common_query($request, $offline_payment_query)->sum('order_amount');
+        $offline_payment += self::earning_common_query($request, $offline_payment_query)->sum('refer_and_earn_discount');
 
         $total_payment = $cash_payment + $wallet_payment + $digital_payment + $offline_payment;
 
@@ -424,7 +428,7 @@ class ReportController extends Controller
     }
 
     function getEarnFormOrderAmount($order, $type) {
-        $amount = $order['order_amount'];
+        $amount = $order['order_amount'] + $order['refer_and_earn_discount'];
         $amount -= $order['total_tax_amount'];
         $amount += in_array($type, ['seller', 'admin'], true) && $order->coupon_discount_bearer == 'inhouse' ? $order['discount_amount'] : 0;
         // $amount += $type == 'seller' && $order->coupon_discount_bearer == 'inhouse' ? $order['discount_amount'] : 0;
