@@ -16,16 +16,18 @@
             fetch("{{ url("payment/stripe/token/?payment_id={$data->id}") }}", {
                 method: "GET",
             }).then(function (response) {
-                console.log(response)
-                return response.text();
+                return response.json();
             }).then(function (session) {
-                console.log(session)
-                return stripe.redirectToCheckout({sessionId: JSON.parse(session).id});
+                if (!session.id) {
+                    throw new Error(session.error || "Unable to initialize Stripe checkout.");
+                }
+                return stripe.redirectToCheckout({sessionId: session.id});
             }).then(function (result) {
                 if (result.error) {
                     alert(result.error.message);
                 }
             }).catch(function (error) {
+                alert(error.message || "Unable to initialize payment.");
                 console.error("error:", error);
             });
         });

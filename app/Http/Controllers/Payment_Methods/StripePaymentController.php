@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
+use Stripe\Customer;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
 
@@ -61,7 +62,13 @@ class StripePaymentController extends Controller
 
         Stripe::setApiKey($this->config_values->api_key);
         header('Content-Type: application/json');
-        $currency_code = $data->currency_code;
+        $currency_code = strtolower($data->currency_code ?? 'usd');
+        $paymentMethodTypes = ['card'];
+
+        // Bancontact is available for EUR checkout sessions.
+        if ($currency_code === 'eur') {
+            $paymentMethodTypes[] = 'bancontact';
+        }
 
         if ($data['additional_data'] != null) {
             $business = json_decode($data['additional_data']);
@@ -72,11 +79,16 @@ class StripePaymentController extends Controller
             $business_logo = url('/');
         }
 
-        $checkout_session = Session::create([
-            'payment_method_types' => ['card'],
+        $payer = json_decode($data['payer_information'], true);
+        $payerName = trim($payer['name'] ?? '');
+        $payerEmail = trim($payer['email'] ?? '');
+        $payerPhone = trim($payer['phone'] ?? '');
+
+        $sessionData = [
+            'payment_method_types' => $paymentMethodTypes,
             'line_items' => [[
                 'price_data' => [
-                    'currency' => $currency_code ?? 'usd',
+                    'currency' => $currency_code,
                     'unit_amount' => round($payment_amount, 2) * 100,
                     'product_data' => [
                         'name' => $business_name,
@@ -88,7 +100,34 @@ class StripePaymentController extends Controller
             'mode' => 'payment',
             'success_url' => url('/') . '/payment/stripe/success?session_id={CHECKOUT_SESSION_ID}&payment_id=' . $data->id,
             'cancel_url' => url()->previous(),
-        ]);
+        ];
+
+        if (!empty($payerEmail) && filter_var($payerEmail, FILTER_VALIDATE_EMAIL)) {
+            $sessionData['customer_email'] = $payerEmail;
+        }
+
+        // Prefill contact details with a Stripe Customer when possible.
+        if (!empty($payerName) || !empty($payerPhone) || !empty($payerEmail)) {
+            $customerData = array_filter([
+                'name' => $payerName ?: null,
+                'email' => filter_var($payerEmail, FILTER_VALIDATE_EMAIL) ? $payerEmail : null,
+                'phone' => $payerPhone ?: null,
+            ]);
+
+            if (!empty($customerData)) {
+                $customer = Customer::create($customerData);
+                $sessionData['customer'] = $customer->id;
+                unset($sessionData['customer_email']);
+            }
+        }
+
+        try {
+            $checkout_session = Session::create($sessionData);
+        } catch (\Throwable $exception) {
+            return response()->json([
+                'error' => $exception->getMessage(),
+            ], 422);
+        }
 
         return response()->json(['id' => $checkout_session->id]);
     }
