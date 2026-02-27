@@ -28,6 +28,8 @@ class CustomerProfileUpdateRequest extends FormRequest
         return [
             'f_name' => 'required',
             'l_name' => 'required',
+            'company_name' => 'nullable|string|max:255',
+            'vat_number' => 'nullable|string|max:255',
             'phone' => [
                 'required',
                 'max:20',

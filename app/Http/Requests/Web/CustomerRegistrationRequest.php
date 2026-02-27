@@ -28,6 +28,8 @@ class CustomerRegistrationRequest extends FormRequest
     {
         return [
             'f_name' => 'required',
+            'company_name' => 'nullable|string|max:255',
+            'vat_number' => 'nullable|string|max:255',
             'email' => 'required|email|unique:users',
             'phone' => 'required|unique:users|max:20',
             'password' => 'required|same:con_password',

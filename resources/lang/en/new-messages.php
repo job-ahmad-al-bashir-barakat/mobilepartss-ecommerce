@@ -787,4 +787,11 @@ return [
 	"Notification_Sent_to_All_Vendors" => "Notification Sent to All Vendors",
 	"currently_no_payment_gateway_supported_for_USD_currency." => "Currently no payment gateway supported for USD currency.",
 	"environment_variables_updated_successfully" => "Environment variables updated successfully",
+	"company_name" => "Company name",
+	"Watt" => "Watt",
+	"Payment_id" => "Payment id",
+	"Payment_Id" => "Payment Id",
+	"payment_id" => "Payment id",
+	"wallet_number" => "Wallet number",
+	"VAT_number" => "VAT number",
 ];

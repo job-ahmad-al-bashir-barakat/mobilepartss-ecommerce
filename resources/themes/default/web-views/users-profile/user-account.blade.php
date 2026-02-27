@@ -79,6 +79,17 @@
                                         <input type="text" class="form-control" id="l_name" name="l_name"
                                                value="{{$customerDetail['l_name']}}">
                                     </div>
+                                    <div class="form-group col-md-6 mb-0">
+                                        <label for="company_name"
+                                               class="mb-2 text-capitalize">{{ translate('company_name') }}</label>
+                                        <input type="text" class="form-control" id="company_name" name="company_name"
+                                               value="{{ $customerDetail['company_name'] }}" placeholder="{{ translate('type_your_company_name') }}">
+                                    </div>
+                                    <div class="form-group col-md-6 mb-0">
+                                        <label for="vat_number" class="mb-2 text-capitalize">{{ translate('VAT_number') }}</label>
+                                        <input type="text" class="form-control" id="vat_number" name="vat_number"
+                                               value="{{ $customerDetail['vat_number'] }}" placeholder="BE XXXX XXX XXX">
+                                    </div>
 
                                     <div class="form-group col-md-6 mb-0">
                                         <label for="phone" class="mb-2 text-capitalize">

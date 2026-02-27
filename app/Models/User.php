@@ -17,6 +17,8 @@ use Laravel\Passport\HasApiTokens;
  * @property string $name
  * @property string $f_name
  * @property string $l_name
+ * @property string|null $company_name
+ * @property string|null $vat_number
  * @property string $phone
  * @property string $image
  * @property string $email
@@ -65,6 +67,8 @@ class User extends Authenticatable
         'name',
         'f_name',
         'l_name',
+        'company_name',
+        'vat_number',
         'phone',
         'image',
         'email',
@@ -117,6 +121,8 @@ class User extends Authenticatable
         'name' => 'string',
         'f_name' => 'string',
         'l_name' => 'string',
+        'company_name' => 'string',
+        'vat_number' => 'string',
         'phone' => 'string',
         'image' => 'string',
         'email' => 'string',

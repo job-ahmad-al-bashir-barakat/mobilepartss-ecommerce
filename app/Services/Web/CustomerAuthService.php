@@ -78,6 +78,8 @@ class CustomerAuthService
             'name' => $request['f_name'] . ' ' . $request['l_name'],
             'f_name' => $request['f_name'],
             'l_name' => $request['l_name'],
+            'company_name' => $request['company_name'],
+            'vat_number' => $request['vat_number'],
             'email' => $request['email'],
             'phone' => $request['phone'],
             'is_active' => 1,

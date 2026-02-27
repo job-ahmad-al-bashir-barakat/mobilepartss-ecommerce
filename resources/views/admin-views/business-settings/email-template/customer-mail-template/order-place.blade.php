@@ -27,6 +27,12 @@
                 @if(isset($data['send-mail']))
                     @php
                         $showDeliveryAddress = false;
+                            $customerCompanyName = $data['order']?->customer?->company_name
+                                ?? $data['order']?->billingAddress?->company_name
+                                ?? null;
+                            $customerVatNumber = $data['order']?->customer?->vat_number
+                                ?? $data['order']?->billingAddress?->vat_number
+                                ?? null;
                             foreach ($data['order']->details as $key=>$detail){
                                 $product = json_decode($detail->product_details);
                                 if ($product->product_type == 'physical'){
@@ -40,10 +46,22 @@
                                 <h3 class="mb-2">{{translate('delivery_Address')}} </h3>
                                 <div class="mb-2">{{$data['order']?->shippingAddress->contact_person_name}}</div>
                                 <div>{{$data['order']?->shippingAddress?->address}}</div>
+                                @if($customerCompanyName)
+                                    <div>{{ translate('company_name') }}: {{ $customerCompanyName }}</div>
+                                @endif
+                                @if($customerVatNumber)
+                                    <div>{{ translate('VAT_number') }}: {{ $customerVatNumber }}</div>
+                                @endif
                             @elseif($data['order']?->billingAddress)
                                 <h3 class="mb-2">{{translate('delivery_Address')}} </h3>
                                 <div class="mb-2">{{$data['order']?->billingAddress->contact_person_name}}</div>
                                 <div>{{$data['order']?->billingAddress?->address}}</div>
+                                @if($customerCompanyName)
+                                    <div>{{ translate('company_name') }}: {{ $customerCompanyName }}</div>
+                                @endif
+                                @if($customerVatNumber)
+                                    <div>{{ translate('VAT_number') }}: {{ $customerVatNumber }}</div>
+                                @endif
                             @endif
                         </div>
                     @endif

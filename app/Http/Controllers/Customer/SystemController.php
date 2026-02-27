@@ -535,6 +535,8 @@ class SystemController extends Controller
             'name' => $address['name'],
             'f_name' => $address['name'],
             'l_name' => '',
+            'company_name' => $request['company_name'] ?? null,
+            'vat_number' => $request['vat_number'] ?? null,
             'email' => $address['email'],
             'phone' => $address['phone'],
             'is_active' => 1,

@@ -41,6 +41,22 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group mb-4">
+                                    <label class="text-capitalize" for="company_name">{{ translate('company_name') }}</label>
+                                    <input type="text" id="company_name" name="company_name" class="form-control"
+                                           placeholder="{{ translate('type_your_company_name') }}"
+                                           value="{{ old('company_name') }}"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group mb-4">
+                                    <label class="text-capitalize" for="vat_number">{{ translate('VAT_number') }}</label>
+                                    <input type="text" id="vat_number" name="vat_number" class="form-control"
+                                           placeholder="BE XXXX XXX XXX"
+                                           value="{{ old('vat_number') }}"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group mb-4">
                                     <label for="r_email">{{ translate('email') }}</label>
                                     <input type="text" id="r_email" value="{{ old('email') }}" name="email"
                                            class="form-control"

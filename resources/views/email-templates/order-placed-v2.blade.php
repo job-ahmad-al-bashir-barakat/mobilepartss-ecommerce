@@ -43,6 +43,8 @@ $companyEmail = getWebConfig(name: 'company_email');
 $companyName = getWebConfig(name: 'company_name');
 $companyLogo = getWebConfig(name: 'company_web_logo');
 $order = Order::find($id);
+$customerCompanyName = null;
+$customerVatNumber = null;
 
 if ($order->seller_is == 'seller') {
     $seller = Seller::find($order->seller_id);
@@ -51,8 +53,13 @@ if ($order->seller_is == 'seller') {
 
 if ($order->is_guest) {
     $userPhone = $order['shipping_address_data'] ? $order['shipping_address_data']->phone : $order['billing_address_data']->phone;
+    $customerCompanyName = $order['billing_address_data']->company_name ?? null;
+    $customerVatNumber = $order['billing_address_data']->vat_number ?? null;
 } else {
-    $userPhone = User::find($order->customer_id)->phone;
+    $user = User::find($order->customer_id);
+    $userPhone = $user?->phone;
+    $customerCompanyName = $user?->company_name;
+    $customerVatNumber = $user?->vat_number;
 }
 ?>
 
@@ -107,6 +114,12 @@ if ($order->is_guest) {
                     <br>
                     <div class="mt-1">
                         <span>{{ str_replace('_',' ',$order->payment_method) }}</span><br>
+                        @if(!empty($customerCompanyName))
+                            <span>{{ translate('company_name') }} : {{ $customerCompanyName }}</span><br>
+                        @endif
+                        @if(!empty($customerVatNumber))
+                            <span>{{ translate('VAT_number') }}:  {{ $customerVatNumber }}</span><br>
+                        @endif
                         <span style="color: {{$order->payment_status=='paid'?'green':'red'}};">
                           {{$order->payment_status}}
                         </span><br>

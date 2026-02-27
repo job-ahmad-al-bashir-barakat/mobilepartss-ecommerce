@@ -41,6 +41,26 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="form-label font-semibold">
+                                    {{ translate('company_name') }}
+                                </label>
+                                <input class="form-control text-align-direction" type="text"
+                                    value="{{ old('company_name') }}" name="company_name"
+                                    placeholder="{{ translate('type_your_company_name') }}">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label font-semibold">
+                                    {{ translate('VAT_number') }}
+                                </label>
+                                <input class="form-control text-align-direction" type="text"
+                                    value="{{ old('vat_number') }}" name="vat_number"
+                                    placeholder="BE XXXX XXX XXX">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label font-semibold">
                                     {{ translate('email_address') }}
                                     <span class="input-required-icon">*</span>
                                 </label>

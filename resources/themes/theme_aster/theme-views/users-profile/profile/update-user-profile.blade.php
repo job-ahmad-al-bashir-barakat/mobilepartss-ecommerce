@@ -33,6 +33,18 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
+                                                <label class="text-capitalize" for="company_name">{{ translate('company_name') }}</label>
+                                                <input type="text" id="company_name" class="form-control" value="{{ $customerDetail['company_name'] }}" name="company_name" placeholder="{{ translate('type_your_company_name') }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="text-capitalize" for="vat_number">{{translate('VAT_number')}}</label>
+                                                <input type="text" id="vat_number" class="form-control" value="{{ $customerDetail['vat_number'] }}" name="vat_number" placeholder="BE XXXX XXX XXX">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
                                                 <label for="phone2">{{translate('phone')}}</label>
                                                 <div class="position-relative d-flex align-items-center">
                                                     <input type="tel" id="phone" class="form-control" value="{{$customerDetail['phone']}}" placeholder="{{translate('ex').':'.'01xxxxxxxxx'}}" {{ $customerDetail['is_phone_verified'] ? 'disabled' : '' }} name="phone">
@@ -143,4 +155,3 @@
 @push('script')
     <script src="{{theme_asset('assets/js/password-strength.js')}}"></script>
 @endpush
-

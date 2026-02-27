@@ -561,6 +561,16 @@ $orderTotalPriceSummary = \App\Utils\OrderManager::getOrderTotalPriceSummary(ord
                             <div class="font-normal mt-6px">
                                 {{$billingAddress->contact_person_name}}
                             </div>
+                            @if(!empty($billingAddress->company_name) || !empty(optional($order->customer)->company_name))
+                                <div class="font-normal mt-6px">
+                                    {{ translate('company_name') }}: {{ $billingAddress->company_name ?? optional($order->customer)->company_name }}
+                                </div>
+                            @endif
+                            @if(!empty($billingAddress->vat_number) || !empty(optional($order->customer)->vat_number))
+                                <div class="font-normal mt-6px">
+                                    {{ translate('VAT_number') }}: {{ $billingAddress->vat_number ?? optional($order->customer)->vat_number }}
+                                </div>
+                            @endif
                             <div class="font-semibold mt-6px">
                                 {{$billingAddress->phone}}
                             </div>
@@ -594,6 +604,16 @@ $orderTotalPriceSummary = \App\Utils\OrderManager::getOrderTotalPriceSummary(ord
                             @else
                                 <div class="font-normal mt-6px">
                                     {{ $order->customer !=null? $order->customer['f_name'].' '.$order->customer['l_name']:translate('name_not_found') }}
+                                </div>
+                            @endif
+                            @if(!empty(optional($order->customer)->company_name))
+                                <div class="font-normal mt-6px">
+                                    {{ translate('company_name') }}: {{ optional($order->customer)->company_name }}
+                                </div>
+                            @endif
+                            @if(!empty(optional($order->customer)->vat_number))
+                                <div class="font-normal mt-6px">
+                                    {{ translate('VAT_number') }}: {{ optional($order->customer)->vat_number }}
                                 </div>
                             @endif
                             @if (isset($order->customer) && $order->customer['id']!=0)

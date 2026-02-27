@@ -95,6 +95,8 @@ class UserProfileController extends Controller
         User::find($user['id'])->update([
             'f_name' => $request['f_name'],
             'l_name' => $request['l_name'],
+            'company_name' => $request['company_name'],
+            'vat_number' => $request['vat_number'],
             'phone' => $user['is_phone_verified'] ? $user['phone'] : $request['phone'],
             'email' => $request['email'],
             'is_phone_verified' => $request['phone'] == $user['phone'] ? $user['is_phone_verified'] : 0,
