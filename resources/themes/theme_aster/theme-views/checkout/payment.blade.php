@@ -110,14 +110,17 @@
                                         @if (isset($offline_payment) && $offline_payment['status'] && count($offline_payment_methods) > 0)
                                             <li>
                                                 <label class="w-100">
-                                                    <span
-                                                        class="payment-method payment-method_parent d-flex align-items-center gap-3 overflow-hidden disabled-proceed-to-payment"
+                                                        <span
+                                                            class="payment-method payment-method_parent d-flex align-items-center gap-3 overflow-hidden disabled-proceed-to-payment"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#offline_payment_submit_button">
                                                         <img width="30"
                                                              src="{{ theme_asset('assets/img/icons/cash-payment.png') }}"
                                                              class="dark-support" alt="">
-                                                        <span class="fs-16">{{ translate('offline_payment') }}</span>
+                                                        <span class="fs-16 d-flex flex-column">
+                                                            <span>{{ translate('offline_payment') }}</span>
+                                                            <small class="text-muted text-lowercase">{{ translate('offline_payments_manual') }}</small>
+                                                        </span>
                                                     </span>
                                                 </label>
                                             </li>
@@ -133,7 +136,10 @@
                                                             <img width="30"
                                                                  src="{{ theme_asset('assets/img/icons/degital-payment.png') }}"
                                                                  class="dark-support" alt="">
-                                                            <span class="fs-16">{{ translate('Digital_Payment') }}</span>
+                                                            <span class="fs-16 d-flex flex-column">
+                                                                <span>{{ translate('Digital_Payment') }}</span>
+                                                                <small class="text-muted text-lowercase">{{ translate('online_payments_card_wallet_bancontact') }}</small>
+                                                            </span>
                                                         </span>
                                                     </label>
                                                 </li>

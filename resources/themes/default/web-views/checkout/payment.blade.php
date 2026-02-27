@@ -212,6 +212,9 @@
                                                             @else
                                                                 {{ str_replace('_', ' ', $payment_gateway->key_name) }}
                                                             @endif
+                                                            <small class="d-block text-muted text-lowercase">
+                                                                {{ translate('online_payments_card_wallet_bancontact') }}
+                                                            </small>
                                                         </span>
                                                     </label>
                                                 </form>
@@ -238,6 +241,9 @@
                                                         <i class="tio-info text-primary"></i>
                                                     </div>
                                                 </div>
+                                                <p class="mb-0 mt-2 text-muted fs-12 text-capitalize">
+                                                    {{ translate('offline_payments_manual') }}
+                                                </p>
 
                                                 <div class="mt-4 pay_offline_card d-none">
                                                     <div class="d-flex flex-wrap gap-3">
