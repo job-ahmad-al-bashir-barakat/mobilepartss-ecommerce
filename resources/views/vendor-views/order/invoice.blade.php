@@ -3,13 +3,14 @@
     $currencyCode = getCurrencyCode(type: 'default');
     $direction = Session::get('direction');
     $lang = getDefaultLanguage();
+    $invoiceCompanyName = getWebConfig(name: 'company_name');
 @endphp
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{$direction}}"
       style="text-align: {{$direction === "rtl" ? 'right' : 'left'}};"
       xmlns="http://www.w3.org/1999/html">
     <head>
         <meta charset="UTF-8">
-        <title>{{ translate('invoice')}}</title>
+        <title>{{ $invoiceCompanyName ? $invoiceCompanyName.' - ' : '' }}{{ translate('invoice')}}</title>
         <meta http-equiv="Content-Type" content="text/html;"/>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
@@ -510,7 +511,7 @@
                 <tr>
                     <td style="padding:0;text-align:{{$direction === "rtl" ? 'right' : 'left'}}">
                         <div class="text-dark" style="text-transform:uppercase; font-size:22px;margin-bottom:5px">
-                            {{ translate('Invoice')}}
+                            {{ $invoiceCompanyName ? $invoiceCompanyName.' - ' : '' }}{{ translate('Invoice')}}
                         </div>
                         <div class="font-normal">
                             <span class="font-bold">{{ translate('invoice_Date')}}</span> : {{date('M d ,Y',strtotime($order['created_at']))}}
