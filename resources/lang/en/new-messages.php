@@ -794,4 +794,6 @@ return [
 	"payment_id" => "Payment id",
 	"wallet_number" => "Wallet number",
 	"VAT_number" => "VAT number",
+	"offline_payments_manual" => "Offline payments manual",
+	"online_payments_card_wallet_bancontact" => "Online payments card wallet bancontact",
 ];
