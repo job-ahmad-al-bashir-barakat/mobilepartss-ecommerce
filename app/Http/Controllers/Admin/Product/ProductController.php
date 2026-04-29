@@ -522,16 +522,23 @@ class ProductController extends BaseController
         ], 200);
     }
 
-    public function deleteImage(Request $request, ProductService $service): RedirectResponse
+    public function deleteImage(Request $request, ProductService $service): JsonResponse|RedirectResponse
     {
-        $this->deleteFile(filePath: '/product/' . $request['image']);
         $product = $this->productRepo->getFirstWhere(params: ['id' => $request['id']]);
 
         if (count(json_decode($product['images'])) < 2) {
+            if ($request->ajax() || $request->expectsJson()) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => translate('you_can_not_delete_all_images'),
+                ], 200);
+            }
+
             ToastMagic::warning(translate('you_can_not_delete_all_images'));
             return back();
         }
 
+        $this->deleteFile(filePath: '/product/' . $request['image']);
         $imageProcessing = $service->deleteImage(request: $request, product: $product);
 
         $updateData = [
@@ -539,6 +546,13 @@ class ProductController extends BaseController
             'color_image' => json_encode($imageProcessing['color_images']),
         ];
         $this->productRepo->update(id: $request['id'], data: $updateData);
+
+        if ($request->ajax() || $request->expectsJson()) {
+            return response()->json([
+                'status' => 1,
+                'message' => translate('product_image_removed_successfully'),
+            ], 200);
+        }
 
         ToastMagic::success(translate('product_image_removed_successfully'));
         return back();

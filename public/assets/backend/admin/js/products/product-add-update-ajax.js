@@ -166,3 +166,40 @@ $(".delete_preview_file_input").on("click", function () {
         },
     });
 });
+
+$(document).on("click", "a.delete_file_input_css", function (event) {
+    event.preventDefault();
+
+    const deleteButton = $(this);
+    const imageContainer = deleteButton.closest(".upload-file").length
+        ? deleteButton.closest(".upload-file")
+        : deleteButton.closest('[id^="addition-image-section-"]');
+
+    renderProductAjaxSetup();
+
+    $.ajax({
+        type: "GET",
+        url: deleteButton.attr("href"),
+        success: function (response) {
+            if (response.errors) {
+                for (let i = 0; i < response.errors.length; i++) {
+                    setTimeout(() => {
+                        toastMagic.error(response.errors[i].message);
+                    }, i * 500);
+                }
+                return;
+            }
+
+            if (response.status === 0) {
+                toastMagic.warning(response.message);
+                return;
+            }
+
+            toastMagic.success(response.message);
+            imageContainer.remove();
+        },
+        error: function () {
+            toastMagic.error($("#message-product-added-successfully").data("text"));
+        },
+    });
+});
